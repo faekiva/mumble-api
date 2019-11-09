@@ -2,15 +2,15 @@ import { Murmur } from "./Murmur";
 import { Ice } from "ice";
 
 
-
+let ic = Ice.initialize();
 let murmur: any;
 
 Ice.Promise.try(
-    function()
+    async function()
     {
-        let ic = Ice.initialize();
+        
         let base = ic.stringToProxy("Meta:tcp -h 127.0.0.1 -p 6502");
-        Murmur.MetaPrx.checkedCast(base).then( 
+        await Murmur.MetaPrx.checkedCast(base).then( 
             (metaprx) => (metaprx.getAllServers().then (
                 (serverList) => {
                     serverList.forEach((server) =>{
@@ -26,12 +26,14 @@ Ice.Promise.try(
                     })
                 }
             ))
-            ).catch((e) => {console.log(e)}).finally(() => {ic.destroy();})
+            ).catch((e) => {console.log(e)});
     }
 ).finally(
     function()
     {
-
+        if (ic) {
+            ic.destroy();
+        }
         
     }
 ).catch(
