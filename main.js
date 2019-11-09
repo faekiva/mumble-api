@@ -14,11 +14,9 @@ ice_1.Ice.Promise.try(function () {
                 });
             });
         });
-    }))).catch((e) => {
-        ic.destroy();
-    }).finally(function () {
-    }).catch(function (ex) {
-        //console.log(ex.toString());
-        process.exit(1);
-    });
+    }))).catch((e) => { console.log(e); }).finally(() => { ic.destroy(); });
+}).finally(function () {
+}).catch(function (ex) {
+    //console.log(ex.toString());
+    process.exit(1);
 });

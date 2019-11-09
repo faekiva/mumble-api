@@ -26,8 +26,7 @@ Ice.Promise.try(
                     })
                 }
             ))
-            ).catch((e) => {//console.log(e);});}}
-        ic.destroy();
+            ).catch((e) => {console.log(e)}).finally(() => {ic.destroy();})
     }
 ).finally(
     function()
