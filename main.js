@@ -2,24 +2,29 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Murmur_1 = require("./Murmur");
 const ice_1 = require("ice");
-let ic = ice_1.Ice.initialize();
-let murmur;
-ice_1.Ice.Promise.try(async function () {
-    let base = ic.stringToProxy("Meta:tcp -h 127.0.0.1 -p 6502");
-    await Murmur_1.Murmur.MetaPrx.checkedCast(base).then((metaprx) => (metaprx.getAllServers().then((serverList) => {
-        serverList.forEach((server) => {
-            server.getUsers().then((users) => {
-                users.forEach((user) => {
-                    console.log(user.name);
-                });
-            });
-        });
-    }))).catch((e) => { console.log(e); });
-}).finally(function () {
-    if (ic) {
-        ic.destroy();
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+async function callIce() {
+    let ic = ice_1.Ice.initialize();
+    let server = await ice_1.Ice.Promise.try(async function () {
+        let base = ic.stringToProxy("Meta:tcp -h 127.0.0.1 -p 6502");
+        let meta = await Murmur_1.Murmur.MetaPrx.checkedCast(base);
+        let server = (await meta.getAllServers())[0];
+        return server;
+    }).finally(function () {
+    }).catch(function (ex) {
+        console.log(ex.toString());
+    });
+    if (!(server instanceof Murmur_1.Murmur.ServerPrx)) {
+        return Promise.resolve();
     }
-}).catch(function (ex) {
-    //console.log(ex.toString());
-    process.exit(1);
-});
+    server.sendMessageChannel(17, false, "hi Justin").catch((e) => console.log("send message channel dieded", e));
+    server.getUsers().then((users) => {
+        users.forEach((user) => {
+            console.log(user.name);
+        });
+    });
+    ic.destroy();
+}
+callIce();
