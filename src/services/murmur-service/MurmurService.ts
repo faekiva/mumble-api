@@ -1,8 +1,5 @@
-import { Murmur } from "../../../lib/murmur/Murmur";
+import { Murmur } from "../../lib/murmur/Murmur";
 import { Ice } from "ice";
-
-
-
 
 export abstract class MurmurService {
     private static _ic: Ice.Communicator = Ice.initialize();
@@ -14,10 +11,10 @@ export abstract class MurmurService {
             await Ice.Promise.try(
                 async () =>
                 {
-                    let base = MurmurService.ic.stringToProxy("Meta:tcp -h 127.0.0.1 -p 6502");
+                    let base = MurmurService._ic.stringToProxy("Meta:tcp -h 127.0.0.1 -p 6502");
                     let meta = await Murmur.MetaPrx.checkedCast(base);
                     let server = (await meta.getAllServers())[0];
-                    MurmurService.server = server;
+                    MurmurService._server = server;
                 }
             ).catch(
                 function(ex)
@@ -30,17 +27,13 @@ export abstract class MurmurService {
             
     }
 
-    static get ic() {
-        return MurmurService._ic;
-    }
-
-    static set server(server: Murmur.ServerPrx) {
-        MurmurService._server = server;
-    }
-
     public static async getUsers(): Promise<Murmur.UserMap> {
         await MurmurService.initializeService();
-        return this._server.getUsers();
+        return MurmurService._server.getUsers();
     }
     
+    public static async sendMessageToChannel(channelId: number, text: string, includeSubChannels = false): Promise<void> {
+        await MurmurService.initializeService();
+        MurmurService._server.sendMessageChannel(channelId, includeSubChannels, text);
+    }
 }
