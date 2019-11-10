@@ -2,13 +2,18 @@
   "name": "mumble-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "dependencies": {
-    "@types/node": "^12.12.7",
+    "dinoloop": "^2.3.0",
+    "express": "^4.17.1",
     "ice": "^3.7.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^12.12.7",
+    "typescript": "^2.9.2"
+  },
   "scripts": {
+    "start": "tsc && node src/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

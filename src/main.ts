@@ -1,12 +1,6 @@
-import { Murmur } from "./Murmur";
+import { Murmur } from "../lib/murmur/Murmur";
 import { Ice } from "ice";
-import { isNull } from "util";
-import { AssertionError } from "assert";
 
-
-function delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
-}
 
 async function callIce(): Promise<void> {
     let ic = Ice.initialize();
@@ -34,7 +28,7 @@ async function callIce(): Promise<void> {
         return Promise.resolve();
     }
 
-    server.sendMessageChannel(17, false, "hi Justin").catch((e) => console.log("send message channel dieded", e));
+    server.sendMessageChannel(17, false, "hello").catch((e) => console.log("send message channel dieded", e));
     server.getUsers().then(
         (users) => {
             users.forEach(

@@ -1,10 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Murmur_1 = require("./Murmur");
+const Murmur_1 = require("../lib/murmur/Murmur");
 const ice_1 = require("ice");
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 async function callIce() {
     let ic = ice_1.Ice.initialize();
     let server = await ice_1.Ice.Promise.try(async function () {
@@ -19,7 +16,7 @@ async function callIce() {
     if (!(server instanceof Murmur_1.Murmur.ServerPrx)) {
         return Promise.resolve();
     }
-    server.sendMessageChannel(17, false, "hi Justin").catch((e) => console.log("send message channel dieded", e));
+    server.sendMessageChannel(17, false, "hello").catch((e) => console.log("send message channel dieded", e));
     server.getUsers().then((users) => {
         users.forEach((user) => {
             console.log(user.name);
