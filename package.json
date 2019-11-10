@@ -13,7 +13,7 @@
     "typescript": "^2.9.2"
   },
   "scripts": {
-    "start": "tsc && node src/main.js",
+    "start": "node src/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
