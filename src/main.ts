@@ -1,14 +1,13 @@
 import { MurmurService } from "./services/murmur-service/MurmurService";
+import { MurmurException } from "./services/murmur-service/MurmurException";
 
 async function callIce(): Promise<void> {
-    MurmurService.getUsers().then(
-        (users) => {
-            users.forEach ((user)=> {
-                console.log(user.name)
-            })
-        }
-    )
-
+    try {
+        let users = await MurmurService.getUsers();
+        users.forEach((user) => console.log(user.name));
+    } catch(e) {
+        console.log(e);
+    }
 }
 
 callIce();
