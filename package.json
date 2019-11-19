@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
-    "dinoloop": "^2.3.0",
+    "@types/express": "^4.17.2",
     "express": "^4.17.1",
     "ice": "^3.7.3"
   },

@@ -1,5 +1,7 @@
 import { MurmurService } from "./services/murmur-service/MurmurService";
 import { MurmurException } from "./services/murmur-service/MurmurException";
+import express = require('express');
+
 
 async function callIce(): Promise<void> {
     try {
@@ -10,4 +12,6 @@ async function callIce(): Promise<void> {
     }
 }
 
-callIce();
+// callIce();
+
+const app = express();
