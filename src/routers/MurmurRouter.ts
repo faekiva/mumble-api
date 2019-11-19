@@ -8,10 +8,8 @@ async function getIps(): Promise<Array<string>> {
     let users = await MurmurService.getUsers();
     let output = new Array<string>();
     users.forEach((user) => {
-        let numDex = 0
         let ipString = ""
-        for (; user.address[numDex] !== 0; numDex++);
-        for (; numDex < user.address.length; numDex++) {
+        for (let numDex = (user.address.length - 4); numDex < user.address.length; numDex++) {
             ipString += String(user.address[numDex])
             if(numDex < user.address.length - 1) {
                 ipString += "."
@@ -23,7 +21,7 @@ async function getIps(): Promise<Array<string>> {
 }
 
 let isIpAddressOnline = async (req: express.Request, res: express.Response) => {
-    if (req.params.ip in (await getIps())){
+    if ((await getIps()).indexOf(req.params.ip) >= 0 ){
         res.send(true)
     }
     else {
@@ -32,3 +30,5 @@ let isIpAddressOnline = async (req: express.Request, res: express.Response) => {
 };
 
 MurmurRouter.get('/:ip',  isIpAddressOnline)
+
+//getIps().then((ips) => (console.log(ips)))
