@@ -32,4 +32,9 @@ export abstract class MurmurService {
             return Promise.reject(new MurmurException(err));
         }
     }
+
+//     public static async sendMessageToIpChannel(ip:string): Promise<void> {
+//         try
+//     }
+
 }

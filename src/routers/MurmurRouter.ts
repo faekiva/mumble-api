@@ -1,27 +1,22 @@
 import express = require('express');
 import { MurmurService } from '../services/murmur-service/MurmurService';
+import { ipv4 } from '../lib/ipv4';
 
-export let MurmurRouter = express.Router()
+export const MurmurRouter = express.Router()
 
-
-async function getIps(): Promise<Array<string>> {
-    let users = await MurmurService.getUsers();
-    let output = new Array<string>();
+async function getIps(): Promise<Array<ipv4>> {
+    const users = await MurmurService.getUsers();
+    const output = new Array<ipv4>();
     users.forEach((user) => {
-        let ipString = ""
-        for (let numDex = (user.address.length - 4); numDex < user.address.length; numDex++) {
-            ipString += String(user.address[numDex])
-            if(numDex < user.address.length - 1) {
-                ipString += "."
-            }
-        }
-        output.push(ipString);
+        output.push(new ipv4(user.address));
     });
     return output;
 }
 
 let isIpAddressOnline = async (req: express.Request, res: express.Response) => {
-    if ((await getIps()).indexOf(req.params.ip) >= 0 ){
+    let ips = await getIps()
+    let reqIp = new ipv4(req.params.ip);
+    if (reqIp.In(ips)){
         res.send(true)
     }
     else {
@@ -29,6 +24,5 @@ let isIpAddressOnline = async (req: express.Request, res: express.Response) => {
     }
 };
 
-MurmurRouter.get('/:ip',  isIpAddressOnline)
-
-//getIps().then((ips) => (console.log(ips)))
+MurmurRouter.get('/isConnected/:ip',  isIpAddressOnline)
+//getIps().then((ips) => (console.log(ips))) 
