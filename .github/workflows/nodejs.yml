@@ -16,8 +16,9 @@ jobs:
     - name: npm install, build, and test
       run: |
         npm install -g typescript
-        npm install
+        npm ci --only=production
         tsc
+        ls node_modules
         ls dist
       env:
         CI: true
