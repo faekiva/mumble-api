@@ -1,6 +1,7 @@
 import { Murmur } from "../../lib/murmur/Murmur";
 import { Ice } from "ice";
 import { MurmurException } from "./MurmurException";
+import { IPv4 } from "../../lib/IPv4";
 
 
 export abstract class MurmurService {
@@ -33,8 +34,17 @@ export abstract class MurmurService {
         }
     }
 
-//     public static async sendMessageToIpChannel(ip:string): Promise<void> {
-//         try
-//     }
+    public static async sendMessageToIpChannel(ip:IPv4, message: string): Promise<void> {
+        try {
+            let users = await (await MurmurService._server).getUsers()
+            users.forEach((user) => {
+                if(ip.Equals(new IPv4(user.address))) {
+                    MurmurService.sendMessageToChannel(user.channel, message)
+                }
+            });
+        } catch (err) {
+            return Promise.reject(new MurmurException(err));
+        }
+    }
 
 }

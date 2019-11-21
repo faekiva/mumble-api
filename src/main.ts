@@ -1,6 +1,5 @@
 import { MurmurService } from "./services/murmur-service/MurmurService";
-import { MurmurException } from "./services/murmur-service/MurmurException";
-import express = require('express');
+import express from 'express';
 import { MurmurRouter } from "./routers/MurmurRouter";
 
 

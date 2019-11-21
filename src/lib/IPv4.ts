@@ -9,7 +9,7 @@ export class Ipv4FormatException extends Error {
 
 }
 
-export class ipv4 {
+export class IPv4 {
 
     public octets = new Array<number>();
     
@@ -44,7 +44,7 @@ export class ipv4 {
         }
     }
 
-    public Equals(other: ipv4) : boolean {
+    public Equals(other: IPv4) : boolean {
         for (let index = 0; index < IP_OCTETS; index++) {
             if (this.octets[index] !== other.octets[index]) {
                 return false;
@@ -53,7 +53,7 @@ export class ipv4 {
         return true;
     }
 
-    public In(ips: Array<ipv4>): boolean {
+    public In(ips: Array<IPv4>): boolean {
         return ips.some((ip)=> {ip.Equals(this)})
     }
 

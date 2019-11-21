@@ -1,22 +1,24 @@
-import express = require('express');
+import {Request, Router, Response} from 'express';
 import { MurmurService } from '../services/murmur-service/MurmurService';
-import { ipv4 } from '../lib/ipv4';
+import { IPv4 } from '../lib/IPv4';
+import bodyParser = require('body-parser');
 
-export const MurmurRouter = express.Router()
 
-async function getIps(): Promise<Array<ipv4>> {
-    const users = await MurmurService.getUsers();
-    const output = new Array<ipv4>();
-    users.forEach((user) => {
-        output.push(new ipv4(user.address));
+export const MurmurRouter = Router()
+
+async function getIps(): Promise<Array<IPv4>> {
+    const users = MurmurService.getUsers();
+    const output = new Array<IPv4>();
+    (await users).forEach((user) => {
+        output.push(new IPv4(user.address));
     });
     return output;
 }
 
-let isIpAddressOnline = async (req: express.Request, res: express.Response) => {
-    let ips = await getIps()
-    let reqIp = new ipv4(req.params.ip);
-    if (reqIp.In(ips)){
+let isIpAddressOnline = async (req: Request, res: Response) => {
+    let ips = getIps()
+    let reqIp = new IPv4(req.params.ip);
+    if (reqIp.In(await ips)){
         res.send(true)
     }
     else {
@@ -24,5 +26,20 @@ let isIpAddressOnline = async (req: express.Request, res: express.Response) => {
     }
 };
 
+let sendMessageToIpChannel = async (req: Request, res: Response) => {
+    let body = (req.body as ipChannelJson)
+    await MurmurService.sendMessageToIpChannel(new IPv4(body.ip), body.message)
+    res.status(200)
+    res.send()
+}
+
 MurmurRouter.get('/isConnected/:ip',  isIpAddressOnline)
+
+MurmurRouter.route('/messageIp')
+    .post(bodyParser.json(), sendMessageToIpChannel)
 //getIps().then((ips) => (console.log(ips))) 
+
+interface ipChannelJson {
+    ip: string
+    message: string
+}
