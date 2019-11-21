@@ -17,4 +17,4 @@ async function callIce(): Promise<void> {
 const app = express();
 app.use('/murmur', MurmurRouter)
 
-app.listen(4815)
+app.listen(process.env.PORT || 4815)
