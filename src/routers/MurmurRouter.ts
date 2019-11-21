@@ -1,7 +1,7 @@
 import {Request, Router, Response} from 'express';
 import { MurmurService } from '../services/murmur-service/MurmurService';
 import { IPv4 } from '../lib/IPv4';
-import bodyParser = require('body-parser');
+import * as bodyparser from 'body-parser';
 
 
 export const MurmurRouter = Router()
@@ -36,7 +36,7 @@ let sendMessageToIpChannel = async (req: Request, res: Response) => {
 MurmurRouter.get('/isConnected/:ip',  isIpAddressOnline)
 
 MurmurRouter.route('/messageIp')
-    .post(bodyParser.json(), sendMessageToIpChannel)
+    .post(bodyparser.json(), sendMessageToIpChannel)
 //getIps().then((ips) => (console.log(ips))) 
 
 interface ipChannelJson {
