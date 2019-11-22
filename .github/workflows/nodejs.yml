@@ -11,6 +11,6 @@ jobs:
     - uses: actions/checkout@v1
     - name: npm install, build, and test
       run: |
-        docker build -t strollingfellow/mumble-api
+        docker build . -t strollingfellow/mumble-api
       env:
         CI: true
