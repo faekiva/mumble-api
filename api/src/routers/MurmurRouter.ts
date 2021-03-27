@@ -15,6 +15,15 @@ async function getIps(): Promise<Array<IPv4>> {
     return output;
 }
 
+let getUsers = async (req: Request, res: Response) => {
+    let users = await MurmurService.getUsers();
+    let userNames: string[] = []
+    users.forEach((user)=> {
+        userNames.push(user.name)
+    });
+    res.send(userNames)
+}
+
 let isIpAddressOnline = async (req: Request, res: Response) => {
     let ips = getIps()
     let reqIp = new IPv4(req.params.ip);
@@ -34,6 +43,8 @@ let sendMessageToIpChannel = async (req: Request, res: Response) => {
 }
 
 MurmurRouter.get('/isConnected/:ip',  isIpAddressOnline)
+
+MurmurRouter.get("/getUsers", getUsers)
 
 MurmurRouter.route('/messageIp')
     .post(bodyparser.json(), sendMessageToIpChannel)

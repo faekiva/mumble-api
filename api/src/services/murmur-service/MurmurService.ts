@@ -12,7 +12,7 @@ export abstract class MurmurService {
         try {
             MurmurService._ic.getProperties().setProperty("Ice.Default.EncodingVersion", "1.0");
             
-            let base = MurmurService._ic.stringToProxy("Meta:tcp -h 127.0.0.1 -p 6502");
+            let base = MurmurService._ic.stringToProxy("Meta -e 1.0:tcp -h 127.0.0.1 -p 6502");
             let meta = await Murmur.MetaPrx.checkedCast(base);
             return (await meta.getAllServers())[0];
         } catch (err) {
