@@ -1,4 +1,4 @@
-from node:12
+from node:15
 workdir usr/src/app
 COPY package*.json ./
 RUN npm ci --only=production && \

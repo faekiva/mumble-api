@@ -10,11 +10,15 @@ export abstract class MurmurService {
 
     private static async initializeService(): Promise<Murmur.ServerPrx>{
         try {
+            MurmurService._ic.getProperties().setProperty("Ice.Default.EncodingVersion", "1.0");
+            
             let base = MurmurService._ic.stringToProxy("Meta:tcp -h 127.0.0.1 -p 6502");
             let meta = await Murmur.MetaPrx.checkedCast(base);
             return (await meta.getAllServers())[0];
         } catch (err) {
-            return Promise.reject(new MurmurException(err));
+            console.error(err)
+            process.exit(1)
+            //return Promise.reject(new MurmurException(err));
         }
     }
 

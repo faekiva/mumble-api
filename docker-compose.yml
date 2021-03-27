@@ -1,0 +1,26 @@
+version: '3'
+services:
+services:
+  murmur:
+    image: goofball222/murmur
+    container_name: murmur
+    ports:
+      - 64738:64738
+      - 64738:64738/udp
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./cert:/opt/murmur/cert
+      - ./config:/opt/murmur/config
+      - ./data:/opt/murmur/data
+      - ./log:/opt/murmur/log
+    environment:
+      - TZ=UTC
+  mumble-mumo:
+    image: mumblevoip/mumo
+    container_name: mumble-mumo
+    #restart: on-failure
+    volumes:
+        - ./mumo:/data
+    network_mode : "service:murmur"
+    depends_on:
+        - murmur
