@@ -22,9 +22,9 @@ export abstract class MurmurService {
         }
     }
 
-    public static async getUsers(): Promise<Murmur.UserMap> {
+    public static async getUsers(): Promise<Murmur.User[]> {
         try {
-            return (await MurmurService._server).getUsers();
+            return Array.from((await (await MurmurService._server).getUsers()).values());
         } catch(err) {
             return Promise.reject(new MurmurException(err));
         }
