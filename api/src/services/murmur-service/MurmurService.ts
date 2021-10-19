@@ -25,7 +25,7 @@ export abstract class MurmurService {
     public static async getUsers(): Promise<Murmur.User[]> {
         try {
             return Array.from((await (await MurmurService._server).getUsers()).values());
-        } catch(err) {
+        } catch(err: any) {
             return Promise.reject(new MurmurException(err));
         }
     }
@@ -33,7 +33,7 @@ export abstract class MurmurService {
     public static async sendMessageToChannel(channelId: number, message: string, includeSubChannels = false): Promise<void> {
         try {
             (await MurmurService._server).sendMessageChannel(channelId, includeSubChannels, message);
-        } catch (err) {
+        } catch (err: any) {
             return Promise.reject(new MurmurException(err));
         }
     }
@@ -46,7 +46,7 @@ export abstract class MurmurService {
                     MurmurService.sendMessageToChannel(user.channel, message)
                 }
             });
-        } catch (err) {
+        } catch (err: any) {
             return Promise.reject(new MurmurException(err));
         }
     }
